@@ -27,7 +27,7 @@ const Index = () => {
   };
 
   const donate = () => {
-    window.open('https://anypay.io/merchant/miami-rp', '_blank');
+    window.location.href = '/donate';
   };
 
   return (
