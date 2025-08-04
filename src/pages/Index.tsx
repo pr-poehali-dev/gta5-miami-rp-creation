@@ -1,15 +1,11 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [adminPassword, setAdminPassword] = useState('');
-  const [news, setNews] = useState([
+  const [news] = useState([
     {
       id: 1,
       title: 'Открытие сервера Miami RP',
@@ -25,31 +21,6 @@ const Index = () => {
       image: ''
     }
   ]);
-  const [newNewsTitle, setNewNewsTitle] = useState('');
-  const [newNewsContent, setNewNewsContent] = useState('');
-  const [newNewsImage, setNewNewsImage] = useState('');
-
-  const checkAdminAccess = () => {
-    if (window.location.pathname.includes('/admins') || adminPassword === 'admin123') {
-      setIsAdmin(true);
-    }
-  };
-
-  const addNews = () => {
-    if (newNewsTitle && newNewsContent) {
-      const newId = Math.max(...news.map(n => n.id)) + 1;
-      setNews([{
-        id: newId,
-        title: newNewsTitle,
-        content: newNewsContent,
-        date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }),
-        image: newNewsImage
-      }, ...news]);
-      setNewNewsTitle('');
-      setNewNewsContent('');
-      setNewNewsImage('');
-    }
-  };
 
   const startGame = () => {
     window.open('fivem://connect/miami-rp.ru', '_blank');
@@ -58,93 +29,6 @@ const Index = () => {
   const donate = () => {
     window.open('https://anypay.io/merchant/miami-rp', '_blank');
   };
-
-  if (window.location.pathname.includes('/admins') && !isAdmin) {
-    return (
-      <div className="min-h-screen bg-dark flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="text-center font-heading">Админ панель</CardTitle>
-            <CardDescription className="text-center">Введите пароль для доступа</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Input
-              type="password"
-              placeholder="Пароль"
-              value={adminPassword}
-              onChange={(e) => setAdminPassword(e.target.value)}
-            />
-            <Button onClick={checkAdminAccess} className="w-full">
-              Войти
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  if (isAdmin) {
-    return (
-      <div className="min-h-screen bg-dark p-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-heading font-bold text-white">Админ панель</h1>
-            <Button onClick={() => setIsAdmin(false)} variant="outline">
-              <Icon name="LogOut" size={16} className="mr-2" />
-              Выйти
-            </Button>
-          </div>
-
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle className="font-heading">Добавить новость</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Input
-                placeholder="Заголовок новости"
-                value={newNewsTitle}
-                onChange={(e) => setNewNewsTitle(e.target.value)}
-              />
-              <Textarea
-                placeholder="Содержание новости"
-                value={newNewsContent}
-                onChange={(e) => setNewNewsContent(e.target.value)}
-              />
-              <Input
-                placeholder="URL изображения"
-                value={newNewsImage}
-                onChange={(e) => setNewNewsImage(e.target.value)}
-              />
-              <Button onClick={addNews} className="w-full">
-                <Icon name="Plus" size={16} className="mr-2" />
-                Добавить новость
-              </Button>
-            </CardContent>
-          </Card>
-
-          <div className="grid gap-6">
-            <h2 className="text-2xl font-heading font-bold text-white">Управление новостями</h2>
-            {news.map((item) => (
-              <Card key={item.id}>
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                      <p className="text-muted-foreground mb-2">{item.content}</p>
-                      <Badge variant="outline">{item.date}</Badge>
-                    </div>
-                    <Button variant="destructive" size="sm">
-                      <Icon name="Trash2" size={16} />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-dark to-gray-900">
